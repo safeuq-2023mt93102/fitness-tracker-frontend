@@ -1,11 +1,15 @@
-import ActivityLogging from "@/app/components/ActivityLogging";
+import ActivityLogger from "@/app/components/ActivityLogging";
+import LogActivity from "@/app/components/LogActivity";
+import {getServerSession, Session} from "next-auth";
+import {authOptions} from "@/app/api/auth/[...nextauth]/route";
 
-function Nutrition() {
+async function ActivityLog() {
   return (
     <>
-      <ActivityLogging/>
+      <LogActivity/>
+      <ActivityLogger/>
     </>
   );
 }
 
-export default Nutrition;
+export default ActivityLog;

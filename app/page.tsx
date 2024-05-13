@@ -1,4 +1,4 @@
-import HomePage from "@/app/components/LogActivity";
+import HomePage from "@/app/components/HomePage";
 import {getServerSession} from 'next-auth'
 import {authOptions} from './api/auth/[...nextauth]/route'
 import Logout from "@/app/components/Logout";
@@ -7,17 +7,11 @@ import Login from "@/app/components/Login";
 async function Home() {
   const session = await getServerSession(authOptions)
   if (session) {
-    return (<div>
-      <div>Welcome, {session.user?.name}</div>
-      <div><HomePage/></div>
-      <div><Logout/></div>
-    </div>);
+    return (
+        <HomePage/>
+    );
   }
-  return (
-    <div>
-      <Login/>
-    </div>
-  );
+  return (<Login/>);
 }
 
 export default Home;
