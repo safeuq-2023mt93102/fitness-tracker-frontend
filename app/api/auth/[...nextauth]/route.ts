@@ -3,7 +3,7 @@ import NextAuth, {AuthOptions} from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 import {JWT} from "next-auth/jwt";
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   providers: [
     KeycloakProvider({
       clientId: process.env.KEYCLOAK_CLIENT_ID,
@@ -30,7 +30,7 @@ export const authOptions = {
   events: {
     async signOut({token}) {
       if (token.provider === "keycloak") {
-        const issuerUrl = (authOptions.providers.find(p => p.id === "keycloak")).options.issuer
+        const issuerUrl = (authOptions.providers.find(p => p.id === "keycloak"))?.options.issuer
         const logOutUrl = new URL(`${issuerUrl}/protocol/openid-connect/logout`)
         logOutUrl.searchParams.set("id_token_hint", token.id_token)
         await fetch(logOutUrl);

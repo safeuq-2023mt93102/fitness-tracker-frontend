@@ -3,7 +3,7 @@ import LogActivity from "@/app/components/LogActivity";
 import {getServerSession, Session} from "next-auth";
 import {authOptions} from "@/app/api/auth/[...nextauth]/route";
 
-async function ActivityLog() {
+function ActivityLog() {
   return (
     <>
       <LogActivity/>

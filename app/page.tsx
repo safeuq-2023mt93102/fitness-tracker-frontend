@@ -7,9 +7,7 @@ import Login from "@/app/components/Login";
 async function Home() {
   const session = await getServerSession(authOptions)
   if (session) {
-    return (
-        <HomePage/>
-    );
+    return (<HomePage userName={session.user?.name}/>);
   }
   return (<Login/>);
 }

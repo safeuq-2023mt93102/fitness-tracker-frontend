@@ -1,17 +1,46 @@
 "use client"
 import {useState} from 'react';
-import {Button, Modal, Input, Select} from 'antd';
+import {Button, Modal, Input, Select, InputNumber} from 'antd';
 import Link from "next/link";
 
 function LogActivity() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
   const handleOk = () => {
-    setIsModalOpen(false);
+    setLoading(true);
+    let data;
+    switch (selectValue) {
+      case "WALKING":
+        data = {
+          type: selectValue,
+          steps: activityLog.walkingSteps,
+        };
+        break;
+      case "CYCLING":
+        data = {
+          type: selectValue,
+          distance: activityLog.cyclingDistance,
+          data: activityLog.cyclingUnit
+        };
+        break;
+    }
+    fetch("/api", {
+      method: "POST",
+      body: JSON.stringify({
+        path: '/activity',
+        payload: {
+          data: data
+        }
+      })
+    }).then(() => {
+      setLoading(false);
+      setIsModalOpen(false);
+    })
   };
 
   const handleCancel = () => {
@@ -24,16 +53,20 @@ function LogActivity() {
   };
 
   const [activityLog, setActivityLog] = useState({
-    walkingSteps: "",
-    cyclingDistance: "",
-    cyclingUnit: ""
+    walkingSteps: 0,
+    cyclingDistance: 0,
+    cyclingUnit: "KILOMETRES"
   })
   return (
     <>
       <Button type="primary" onClick={showModal}>
         Log activity
       </Button>
-      <Modal title="Log Activity" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="Log Activity" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={[
+        <Button key="submit" type="primary" onClick={handleOk} loading={loading}>
+          Log Activity
+        </Button>
+      ]}>
         <Select
           defaultValue="WALKING"
           style={{width: 120}}
@@ -49,27 +82,17 @@ function LogActivity() {
         />
         <form onSubmit={(e) => {
           e.preventDefault();
-          fetch("/api", {
-            method: "POST",
-            body: JSON.stringify({
-              data: {
-                type: selectValue,
-                distance: activityLog.cyclingDistance,
-                unit: activityLog.cyclingUnit
-              }
-            })
-          })
         }
         }>
           {
             selectValue === "WALKING" && (
               <>
                 <label>Steps</label>
-                <Input placeholder="Basic usage" value={activityLog.walkingSteps} onChange={(e) => {
-                  console.log("r.tart", e.target.value)
+                <InputNumber placeholder="Basic usage" value={activityLog.walkingSteps} onChange={(value) => {
+                  console.log("r.tart", value)
                   setActivityLog({
                     ...activityLog,
-                    walkingSteps: e.target.value
+                    walkingSteps: value
                   })
                 }
                 }/>
@@ -81,11 +104,11 @@ function LogActivity() {
             selectValue === "CYCLING" && (
               <>
                 <label>Distance</label>
-                <Input placeholder="Basic usage" value={activityLog.cyclingDistance} onChange={(e) => {
-                  console.log("r.tart", e.target.value)
+                <InputNumber placeholder="Basic usage" value={activityLog.cyclingDistance} onChange={(value) => {
+                  console.log("r.tart", value)
                   setActivityLog({
                     ...activityLog,
-                    cyclingDistance: e.target.value
+                    cyclingDistance: value
                   })
                 }
                 }/>
@@ -100,10 +123,6 @@ function LogActivity() {
               </>
             )
           }
-
-          <Button type="primary" onClick={showModal} htmlType={"submit"}>
-            Log Activity
-          </Button>
         </form>
       </Modal>
     </>
