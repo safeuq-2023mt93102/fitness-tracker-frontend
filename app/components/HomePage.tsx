@@ -7,7 +7,7 @@ const {Text} = Typography;
 function HomePage({userName}) {
   return (
     <>
-      <Flex vertical>
+      <Flex style={{display: "flex", height: "100%"}} align={"center"} justify={"space-evenly"} vertical>
         <Text>Welcome, {userName}</Text>
         <Button type="link" href={"/nutrition"}>Nutrition tracker</Button>
         <Button type="link" href={"/activity_logging"}>Activity logging</Button>
