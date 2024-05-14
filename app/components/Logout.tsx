@@ -4,6 +4,6 @@ import {Button} from 'antd';
 
 export default function Logout() {
   return <Button type="primary" onClick={() => signOut()}>
-    Signout
+    Sign-out
   </Button>
 }

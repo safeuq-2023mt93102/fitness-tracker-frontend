@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 
 const App = () => {
   const [activityData, setActivityData] = useState([]);
@@ -13,9 +13,10 @@ const App = () => {
   const fetchActivityData = async () => {
     try {
       // Make a GET request to fetch activity data from the mock API
-      const response = await axios.get('https://mockapi.com/activity');
+      const response = await fetch('https://mockapi.com/activity');
+      const data = await response.json();
       // Set the activity data in state
-      setActivityData(response.data);
+      setActivityData(data);
     } catch (error) {
       console.error('Error fetching activity data:', error);
     }
